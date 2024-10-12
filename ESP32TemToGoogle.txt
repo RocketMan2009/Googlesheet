@@ -1,0 +1,45 @@
+#include <WiFi.h>
+#include <WiFiMulti.h>
+#include <HTTPClient.h>
+
+WiFiMulti wifiMulti;
+
+void setup() {
+  Serial.begin(115200);
+  delay(10);
+
+  wifiMulti.addAP(".....Account WiFi......", "......รหัส WiFi.......");
+    Serial.println("Connecting Wifi...");
+    if(wifiMulti.run() == WL_CONNECTED) {
+        Serial.println("");
+        Serial.println("WiFi connected");
+        Serial.println("IP address: ");
+        Serial.println(WiFi.localIP());
+    }
+
+}
+
+void loop() {
+    if((wifiMulti.run() == WL_CONNECTED)) {
+      HTTPClient http;
+
+
+      String url = "-------------------------------------------------------------?tem=" + String(t)+ "&hum=" + String(h);
+      Serial.println("Sending Temperature and Humidity to Google Sheet...");
+      http.begin(url.c_str()); //Specify the URL and certificate
+      http.setFollowRedirects(HTTPC_STRICT_FOLLOW_REDIRECTS);
+      int httpCode = http.GET();
+      if(httpCode > 0){
+        String payload = http.getString();
+        Serial.println(httpCode);
+        Serial.println(payload);
+
+      }
+      else {
+        Serial.println("WiFi not connected!");
+      }
+      http.end();
+    }
+  Serial.println("Waiting 5 second for new value");
+  delay(5000);  
+}
