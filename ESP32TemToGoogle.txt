@@ -22,7 +22,8 @@ void setup() {
 void loop() {
     if((wifiMulti.run() == WL_CONNECTED)) {
       HTTPClient http;
-
+      float t=...........;//library ของอุณหภูมิ
+      int h=...........;//library ของความชื้น
 
       String url = "-------------------------------------------------------------?tem=" + String(t)+ "&hum=" + String(h);
       Serial.println("Sending Temperature and Humidity to Google Sheet...");
